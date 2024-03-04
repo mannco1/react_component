@@ -1,0 +1,25 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+.header{
+  background-color: #2C64F5;
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo{
+  color: #42FF00;
+  font-family: "Nunito", sans-serif;
+  font-size: min(max(20px, 5vw), 28px);
+  margin-left: 1.9vw;
+}
+.profile{
+  width: 32px;
+  height: 32px;
+  border-radius: 1000px;
+  background-color: white;
+  margin-right: 0.5vw;
+
+}

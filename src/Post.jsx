@@ -1,11 +1,11 @@
-import './Post.css'
-import { useState } from 'react';
+import './css/Post.css'
 
 
 
 
-
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import PostList from './PostList';
 
 const Post = () => {
   const [posts, setPosts] = useState([]);
@@ -14,18 +14,31 @@ const Post = () => {
   const [image, setImage] = useState('');
   const [content, setContent] = useState('');
 
+  useEffect(() => {
+    // Загрузка данных с сервера при монтировании компонента
+    axios.get('http://localhost:3001/posts')
+      .then(response => setPosts(response.data))
+      .catch(error => console.error('Ошибка при загрузке данных', error));
+  }, []);
+
   const handleSave = () => {
+    const newPost = { title, image, content };
+
     if (currentPostIndex === -1) {
       // Создание нового поста
-      const newPost = { title, image, content };
-      setPosts([...posts, newPost]);
+      axios.post('http://localhost:3001/posts', newPost)
+        .then(response => setPosts([...posts, response.data]))
+        .catch(error => console.error('Ошибка при создании поста', error));
     } else {
       // Редактирование существующего поста
-      const updatedPost = { ...posts[currentPostIndex], title, image, content };
-      const updatedPosts = [...posts];
-      updatedPosts[currentPostIndex] = updatedPost;
-      setPosts(updatedPosts);
-      setCurrentPostIndex(-1); // Сброс текущего индекса после редактирования
+      axios.put(`http://localhost:3001/posts/${posts[currentPostIndex].id}`, newPost)
+        .then(response => {
+          const updatedPosts = [...posts];
+          updatedPosts[currentPostIndex] = response.data;
+          setPosts(updatedPosts);
+          setCurrentPostIndex(-1); // Сброс текущего индекса после редактирования
+        })
+        .catch(error => console.error('Ошибка при редактировании поста', error));
     }
 
     // Сброс полей ввода
@@ -44,10 +57,17 @@ const Post = () => {
   };
 
   const handleDelete = (index) => {
-    // Удаление поста
-    const updatedPosts = [...posts];
-    updatedPosts.splice(index, 1);
-    setPosts(updatedPosts);
+    const postIdToDelete = posts[index].id;
+  
+    // Удаление поста с сервера
+    axios.delete(`http://localhost:3001/posts/${postIdToDelete}`)
+      .then(response => {
+        // Если удаление на сервере прошло успешно, обновляем состояние компонента
+        const updatedPosts = [...posts];
+        updatedPosts.splice(index, 1);
+        setPosts(updatedPosts);
+      })
+      .catch(error => console.error('Ошибка при удалении поста', error));
   };
 
   const handleImageChange = (e) => {
