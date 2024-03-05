@@ -4,16 +4,19 @@ import Post from '../Post.jsx'
 import { Link } from 'react-router-dom';
 import Header from '../elements/Header.jsx'
 import Footer from '../elements/Footer.jsx'
+import Validation from '../Validation.jsx'
+import '../css/index.css'
 
 
-function Profile() {
+function Log() {
   return <div>
     <Header/>
+    <p>Пройдите регистрацию пожалуйста</p>
     
-    
-    <Post />
+    <Validation />
+   
     <Footer/>
   </div>;
 }
 
-export default Profile;
+export default Log;

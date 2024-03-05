@@ -9,9 +9,7 @@ function Home() {
   return <div>
    <Header />
       <p>Добро пожаловать на домашнюю страницу!</p>
-      <Link to="/profile">
-        <button>Перейти к странице Profile</button>
-      </Link>
+      
       <PostList />
       <Footer />
   </div>;
